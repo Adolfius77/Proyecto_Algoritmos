@@ -35,6 +35,20 @@ public class BFS {
             visitado[entrada] = true;
             cola.add(entrada);
         }
+        return recorrerDesde(cola);
+    }
+
+    public boolean existeCamino(int entrada) {
+        Queue<Integer> cola = new LinkedList<>();
+        visitado = new boolean[laberinto.getGrafo().getNumeroNodos()];
+        pasos = new ArrayList<>();
+        salidaEncontrada = -1;
+        visitado[entrada] = true;
+        cola.add(entrada);
+        return recorrerDesde(cola);
+    }
+
+    private boolean recorrerDesde(Queue<Integer> cola) {
         pasos.add("Paso 0: se encolan las entradas | Cola: " + texto(cola));
 
         int paso = 1;

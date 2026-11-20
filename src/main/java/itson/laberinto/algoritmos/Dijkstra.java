@@ -40,7 +40,10 @@ public class Dijkstra {
         for (int i = 0; i < distancia.length; i++) {
             distancia[i] = INFINITO;
             anterior[i] = -1;
+            visitado[i] = false;
         }
+        pasos = new ArrayList<>();
+        salidaMasCercana = -1;
         distancia[origen] = 0;
 
         PriorityQueue<NodoDistancia> cola = new PriorityQueue<>();

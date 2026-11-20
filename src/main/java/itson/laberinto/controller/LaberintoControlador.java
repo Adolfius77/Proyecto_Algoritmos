@@ -47,12 +47,13 @@ public class LaberintoControlador {
         sb.append("Semilla: ").append(laberinto.getSemilla()).append("\n");
 
         BFS bfs = new BFS(laberinto);
-        boolean hayCamino = bfs.existeCamino();
+        boolean hayCamino = bfs.existeCamino(entrada);
         if (hayCamino) {
             sb.append("BFS: sí existe camino, llega a la salida ")
                     .append(laberinto.nombre(bfs.getSalidaEncontrada())).append("\n");
         } else {
-            sb.append("BFS: no existe camino entre ninguna entrada y ninguna salida\n");
+            sb.append("BFS: no existe camino desde ").append(laberinto.nombre(entrada))
+                    .append(" hasta ninguna salida\n");
         }
 
         OrdenTopologico topologico = new OrdenTopologico(laberinto);
@@ -63,30 +64,25 @@ public class LaberintoControlador {
             sb.append("Orden topológico: ").append(unir(orden)).append("\n");
         }
 
-        Dijkstra dijkstra = null;
-        if (hayCamino) {
-            dijkstra = new Dijkstra(laberinto);
-            camino = dijkstra.caminoMasCorto(entrada);
-            if (camino.isEmpty()) {
-                sb.append("Dijkstra: desde ").append(laberinto.nombre(entrada))
-                        .append(" no se puede llegar a ninguna salida\n");
-            } else {
-                int salida = dijkstra.getSalidaMasCercana();
-                sb.append("Dijkstra: la salida más cercana a ").append(laberinto.nombre(entrada))
-                        .append(" es ").append(laberinto.nombre(salida))
-                        .append(" con costo ").append(dijkstra.getDistancia(salida)).append("\n");
-                sb.append("Camino: ").append(unir(camino)).append("\n");
-            }
+        Dijkstra dijkstra = new Dijkstra(laberinto);
+        camino = dijkstra.caminoMasCorto(entrada);
+        if (camino.isEmpty()) {
+            sb.append("Dijkstra: desde ").append(laberinto.nombre(entrada))
+                    .append(" no se puede llegar a ninguna salida\n");
+        } else {
+            int salida = dijkstra.getSalidaMasCercana();
+            sb.append("Dijkstra: la salida más cercana a ").append(laberinto.nombre(entrada))
+                    .append(" es ").append(laberinto.nombre(salida))
+                    .append(" con costo ").append(dijkstra.getDistancia(salida)).append("\n");
+            sb.append("Camino: ").append(unir(camino)).append("\n");
         }
 
         sb.append("\n--- Pasos BFS ---\n");
         agregarPasos(sb, bfs.getPasos());
         sb.append("\n--- Pasos orden topológico ---\n");
         agregarPasos(sb, topologico.getPasos());
-        if (dijkstra != null) {
-            sb.append("\n--- Pasos Dijkstra ---\n");
-            agregarPasos(sb, dijkstra.getPasos());
-        }
+        sb.append("\n--- Pasos Dijkstra ---\n");
+        agregarPasos(sb, dijkstra.getPasos());
         resultado = sb.toString();
     }
 
